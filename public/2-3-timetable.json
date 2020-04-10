@@ -1,0 +1,161 @@
+{
+  "morning": {
+    "subject": "조회",
+    "code": "7987833794"
+  },
+  "end": {
+    "subject": "종례",
+    "code": "7987833794"
+  },
+  "t1": {
+    "monday": {
+      "subject": "응용 프로그래밍 개발",
+      "code": "6863031340"
+    },
+    "tuesday": {
+      "subject": "성공적인 직업생활",
+      "code": "7223454774"
+    },
+    "wednesday": {
+      "subject": "진로",
+      "code": "3955689232"
+    },
+    "thursday": {
+      "subject": "영어 I",
+      "code": "7126847915"
+    },
+    "friday": {
+      "subject": "수학 I",
+      "code": "7965443330"
+    }
+  },
+  "t2": {
+    "monday": {
+      "subject": "물리학 I",
+      "code": "7178015132"
+    },
+    "tuesday": {
+      "subject": "응용 프로그래밍 개발",
+      "code": "6863031340"
+    },
+    "wednesday": {
+      "subject": "물리학 I",
+      "code": "7178015132"
+    },
+    "thursday": {
+      "subject": "문학",
+      "code": "8134411742"
+    },
+    "friday": {
+      "subject": "물리학 I",
+      "code": "7178015132"
+    }
+  },
+  "t3": {
+    "monday": {
+      "subject": "운동과 건강",
+      "code": "7864104388"
+    },
+    "tuesday": {
+      "subject": "수학 I",
+      "code": "7965443330"
+    },
+    "wednesday": {
+      "subject": "정보통신",
+      "code": "3335559622"
+    },
+    "thursday": {
+      "subject": "중국어 I",
+      "code": "7722593481"
+    },
+    "friday": {
+      "subject": "응용 프로그래밍 개발",
+      "code": "6863031340"
+    }
+  },
+  "t4": {
+    "monday": {
+      "subject": "수학 I",
+      "code": "7965443330"
+    },
+    "tuesday": {
+      "subject": "물리학 I",
+      "code": "7178015132"
+    },
+    "wednesday": {
+      "subject": "공업수학",
+      "code": "6838770867"
+    },
+    "thursday": {
+      "subject": "공업수학",
+      "code": "6838770867"
+    },
+    "friday": {
+      "subject": "운동과 건강",
+      "code": "7864104388"
+    }
+  },
+  "t5": {
+    "monday": {
+      "subject": "자료구조",
+      "code": "3650046422"
+    },
+    "tuesday": {
+      "subject": "응용 프로그래밍 화면구현",
+      "code": "3650046422"
+    },
+    "wednesday": {
+      "subject": "자료구조",
+      "code": "3650046422"
+    },
+    "thursday": {
+      "subject": "응용 프로그래밍 화면구현",
+      "code": "3650046422"
+    },
+    "friday": {
+      "subject": "성공적인 직업생활",
+      "code": "7223454774"
+    }
+  },
+  "t6": {
+    "monday": {
+      "subject": "문학",
+      "code": "8134411742"
+    },
+    "tuesday": {
+      "subject": "창체",
+      "code": null
+    },
+    "wednesday": {
+      "subject": "응용 프로그래밍 개발",
+      "code": "6863031340"
+    },
+    "thursday": {
+      "subject": "정보통신",
+      "code": "3335559622"
+    },
+    "friday": {
+      "subject": "영어 I",
+      "code": "7126847915"
+    }
+  },
+  "t7": {
+    "monday": {
+      "subject": "중국어 I",
+      "code": "7722593481"
+    },
+    "tuesday": {
+      "subject": "창체",
+      "code": null
+    },
+    "wednesday": null,
+    "thursday": {
+      "subject": "창체",
+      "code": null
+    },
+    "friday": {
+      "subject": "공업수학",
+      "code": "6838770867"
+    }
+  }
+}
