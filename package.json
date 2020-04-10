@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "babel-node --presets env ./bin/www",
-    "dev": "nodemon --exec babel-node --presets env ./bin/www"
+    "start": "babel --presets env -d ./dist ./src -s && node ./dist/bin/www.js",
+    "dev": "nodemon --exec babel-node --presets env ./src/bin/www.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
