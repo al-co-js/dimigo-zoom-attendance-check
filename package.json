@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "babel-node --presets env ./bin/www",
+    "dev": "nodemon --exec babel-node --presets env ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -13,9 +14,12 @@
     "morgan": "~1.9.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "eslint": "5.16.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "2.20.1",
+    "nodemon": "^2.0.3",
     "prettier-eslint": "^9.0.1"
   }
 }
