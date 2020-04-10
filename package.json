@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "babel --presets env -d ./dist ./src -s && node ./dist/bin/www.js",
+    "build": "babel --presets env -d ./dist ./src -s",
+    "start": "node ./dist/bin/www.js",
     "dev": "nodemon --exec babel-node --presets env ./src/bin/www.js"
   },
   "dependencies": {
