@@ -3,8 +3,7 @@ import { Router } from 'express';
 const router = Router();
 
 router.post('/', (req, res) => {
-  const { requestBody: data } = req.body;
-  console.log(req.body);
+  const data = req.body;
   if (!data) {
     res.sendStatus(412);
     return;
