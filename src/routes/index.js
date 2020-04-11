@@ -6,53 +6,16 @@ import { getValues, setValues } from '../api/sheet-api';
 const router = Router();
 
 const SHEET_NAME = '메인';
-const users = [
-  ['2301', '강정민'],
-  ['2302', '고주현'],
-  ['2303', '고준영'],
-  ['2304', '권순재'],
-  ['2305', '김경훈'],
-  ['2306', '김성훈'],
-  ['2307', '김영상'],
-  ['2308', '김유빈'],
-  ['2309', '김재우'],
-  ['2310', '김창진'],
-  ['2311', '김채린'],
-  ['2312', '민승현'],
-  ['2313', '박성준'],
-  ['2314', '박성진'],
-  ['2315', '박세준'],
-  ['2316', '박주원'],
-  ['2317', '배민규'],
-  ['2318', '백은서'],
-  ['2319', '서동휘'],
-  ['2320', '신현욱'],
-  ['2321', '심재성'],
-  ['2322', '양희수'],
-  ['2323', '유태연'],
-  ['2324', '윤진혁'],
-  ['2325', '이선우'],
-  ['2326', '이정연'],
-  ['2327', '장종우'],
-  ['2328', '정성원'],
-  ['2329', '정성집'],
-  ['2330', '정재엽'],
-  ['2331', '조민수'],
-  ['2332', '조영민'],
-  ['2333', '최승현'],
-  ['2334', '최재희'],
-  ['2335', '황민지'],
-];
 
-const getUserIndex = (userName) => {
+const getUserIndex = (allData, userName) => {
   let name = '';
   let index = 1;
   let isBreak = false;
-  for (let i = 0; i < 35; i += 1) {
+  for (let i = 1; i < allData.length; i += 1) {
     index += 1;
     for (let j = 0; j < 2; j += 1) {
-      if (userName.includes(users[i][j])) {
-        [, name] = users[i];
+      if (userName.includes(allData[i][j])) {
+        [, name] = allData[i];
         isBreak = true;
         break;
       }
@@ -109,7 +72,8 @@ const setUserStatus = async (currentValue, range, value) => {
 };
 
 const participantJoined = async (userName, joinTime) => {
-  const userIndex = getUserIndex(userName);
+  const allData = await getValues(SHEET_NAME);
+  const userIndex = getUserIndex(allData, userName);
   if (userIndex === -1) return false;
 
   const {
@@ -121,7 +85,6 @@ const participantJoined = async (userName, joinTime) => {
 
   const columnName = `${month}/${date} ${currentSubject}`;
   const participantStatus = getParticipantStatus(minute);
-  const allData = await getValues(SHEET_NAME);
 
   const isNew = isNewAttendance(allData, columnName);
   if (isNew) await initializeColumn(allData, columnName);
