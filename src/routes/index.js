@@ -5,6 +5,7 @@ import { getValues, setValues } from '../api/sheet-api';
 
 const router = Router();
 
+const SHEET_NAME = '메인';
 const users = [
   ['2301', '강정민'],
   ['2302', '고주현'],
@@ -62,67 +63,76 @@ const getUserIndex = (userName) => {
   return index;
 };
 
+const parseTime = (joinTime) => {
+  const time = moment.tz(joinTime, 'Asia/Seoul');
+  return {
+    month: time.month() + 1,
+    date: time.date(),
+    hour: time.hour(),
+    minute: time.minute(),
+  };
+};
+
+const getCurrentSubject = (hour, minute) => {
+  if (hour === 8) {
+    return '조회';
+  }
+  if (minute === 16 && minute >= 25) {
+    return '종례';
+  }
+  return undefined;
+};
+
+const getParticipantStatus = (minute) => {
+  if (minute <= 45) return '출석';
+  return '지각';
+};
+
+const isNewAttendance = (allData, columnName) => {
+  if (allData[0][allData[0].length - 1] !== columnName) {
+    return true;
+  }
+  return false;
+};
+
+const initializeColumn = async (allData, columnName) => {
+  const values = Array(36).fill(['미출석'], 1, 36);
+  values[0] = [columnName];
+  const columnChar = String.fromCharCode(65 + allData[0].length);
+  await setValues(values, `${SHEET_NAME}!${columnChar}:${columnChar}`);
+};
+
+const setUserStatus = async (currentValue, range, value) => {
+  if (!currentValue || currentValue === '미출석') {
+    await setValues([[value]], range);
+  }
+};
+
 const participantJoined = async (userName, joinTime) => {
   const userIndex = getUserIndex(userName);
   if (userIndex === -1) return false;
 
-  const time = moment.tz(joinTime, 'Asia/Seoul');
-  const month = time.month() + 1;
-  const date = time.date();
-  const hour = time.hour();
-  const minute = time.minute();
+  const {
+    month, date, hour, minute,
+  } = parseTime(joinTime);
 
-  let now = '';
-  if (hour === 8) {
-    now = '조회';
-  } else if (minute === 16 && minute >= 25) {
-    now = '종례';
-  }
-  if (now === '') {
-    return false;
-  }
+  const currentSubject = getCurrentSubject(hour, minute);
+  if (!currentSubject) return false;
 
-  let status = '';
-  if (minute <= 45) {
-    status = '출석';
-  } else if (minute >= 46) {
-    status = '지각';
-  }
+  const columnName = `${month}/${date} ${currentSubject}`;
+  const participantStatus = getParticipantStatus(minute);
+  const allData = await getValues(SHEET_NAME);
 
-  const allData = await getValues('메인');
-  if (!allData) {
-    return false;
-  }
+  const isNew = isNewAttendance(allData, columnName);
+  if (isNew) await initializeColumn(allData, columnName);
 
-  let isNew = false;
-  if (allData[0][allData[0].length - 1] !== `${month}/${date} ${now}`) {
-    const notAttendeds = Array(35).fill(['미출석'], 0, 35);
-    const res1 = await setValues(
-      notAttendeds,
-      `메인!${String.fromCharCode(65 + allData[0].length)}2:${65 + allData[0].length}36`,
-    );
-    if (!res1) {
-      return false;
-    }
-
-    const res2 = await setValues(
-      [[`${month}/${date} ${now}`]],
-      `메인!${String.fromCharCode(65 + allData[0].length)}1`,
-    );
-    if (!res2) {
-      return false;
-    }
-    isNew = true;
-  }
-
-  const range = `메인!${String.fromCharCode(65 + allData[0].length - (isNew ? 0 : 1))}${userIndex}`;
-  const check = await getValues(range);
-  if (!check || check[0][0] === '미출석') {
-    const res = await setValues([[`${status} ${hour}:${minute}`]], range);
-    if (!res) {
-      return false;
-    }
-  }
+  const column = allData[0].length - (isNew ? 0 : 1);
+  const currentValue = allData[userIndex - 1][column];
+  await setUserStatus(
+    currentValue,
+    `${SHEET_NAME}!${String.fromCharCode(65 + column)}${userIndex}`,
+    `${participantStatus} ${hour}:${minute}`,
+  );
 
   return true;
 };
