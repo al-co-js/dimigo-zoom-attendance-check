@@ -112,12 +112,18 @@ const participantJoined = async (userName, joinTime) => {
   let res = true;
   allData.forEach(async () => {
     if (allData[i][1] === name) {
-      res = await setValues(
-        [[`${status} ${h}:${m}`]],
-        `메인!${String.fromCharCode(65 + allData[0].length - (isNew ? 0 : 1))}${i + 1}`,
+      const range = `메인!${String.fromCharCode(65 + allData[0].length - (isNew ? 0 : 1))}${i + 1}`;
+      const check = await getValues(
+        range,
       );
-      if (!res) {
-        return;
+      if (!check[0][0] || check[0][0] === '미출석') {
+        res = await setValues(
+          [[`${status} ${h}:${m}`]],
+          range,
+        );
+        if (!res) {
+          return;
+        }
       }
     }
     i += 1;
