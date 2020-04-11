@@ -45,7 +45,7 @@ const users = [
 
 const participantJoined = async (userName, joinTime) => {
   let name = '';
-  let index = 0;
+  let index = 1;
   let isBreak = false;
   for (let i = 0; i < 35; i += 1) {
     index += 1;
