@@ -1,36 +1,67 @@
 import fs from 'fs';
 import { google } from 'googleapis';
 
-const authorize = (callback) => {
-  fs.readFile('credentials.json', (_err, content) => {
-    const {
-      client_secret: clientSecret,
-      client_id: clientId,
-      redirect_uris: redirectUris,
-    } = JSON.parse(content).installed;
+const authorize = async () => {
+  const credentials = fs.readFileSync('credentials.json');
+  if (!credentials) {
+    return null;
+  }
 
-    const oAuth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUris[0]);
+  const {
+    client_secret: clientSecret,
+    client_id: clientId,
+    redirect_uris: redirectUris,
+  } = JSON.parse(credentials).installed;
 
-    fs.readFile('token.json', (_err, token) => {
-      oAuth2Client.setCredentials(JSON.parse(token));
-      callback(oAuth2Client);
-    });
-  });
+  const oAuth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUris[0]);
+
+  const token = fs.readFileSync('token.json');
+  if (!token) {
+    return null;
+  }
+
+  oAuth2Client.setCredentials(JSON.parse(token));
+  return oAuth2Client;
 };
 
-class Sheet {
-  static getValues(range, callback) {
-    authorize((auth) => {
-      const sheets = google.sheets({ version: 'v4', auth });
-      sheets.spreadsheets.values.get(
-        {
-          spreadsheetId: process.env.SHEET_ID,
-          range,
-        },
-        callback,
-      );
-    });
+const getValues = async (range) => {
+  const auth = await authorize();
+  if (!auth) {
+    return null;
   }
-}
 
-export default Sheet;
+  const sheets = google.sheets({ version: 'v4', auth });
+  const value = await sheets.spreadsheets.values.get({
+    spreadsheetId: process.env.SHEET_ID,
+    range,
+  });
+  if (!value || value.status !== 200) {
+    return null;
+  }
+
+  return value.data.values;
+};
+
+const setValues = async (values, range) => {
+  const auth = await authorize();
+  if (!auth) {
+    return false;
+  }
+
+  const sheets = google.sheets({ version: 'v4', auth });
+  const res = await sheets.spreadsheets.values.update({
+    spreadsheetId: process.env.SHEET_ID,
+    range,
+    valueInputOption: 'RAW',
+    requestBody: {
+      values,
+    },
+  });
+  if (res.status !== 200) {
+    return false;
+  }
+
+  return true;
+};
+
+export { getValues, setValues };
