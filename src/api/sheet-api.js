@@ -19,20 +19,18 @@ const authorize = (callback) => {
 };
 
 class Sheet {
-  constructor() {
-    this.getValues = (range, callback) => {
-      authorize((auth) => {
-        const sheets = google.sheets({ version: 'v4', auth });
-        sheets.spreadsheets.values.get(
-          {
-            spreadsheetId: process.env.SHEET_ID,
-            range,
-          },
-          callback,
-        );
-      });
-    };
+  static getValues(range, callback) {
+    authorize((auth) => {
+      const sheets = google.sheets({ version: 'v4', auth });
+      sheets.spreadsheets.values.get(
+        {
+          spreadsheetId: process.env.SHEET_ID,
+          range,
+        },
+        callback,
+      );
+    });
   }
 }
 
-export default new Sheet();
+export default Sheet;
