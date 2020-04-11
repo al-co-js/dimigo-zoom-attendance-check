@@ -60,24 +60,16 @@ const participantJoined = async (userName, joinTime) => {
     return false;
   }
 
-  const buf = joinTime.split('T');
-  if (!buf || buf.length !== 2) {
-    return false;
-  }
-  const date = buf[0].substring(buf[0].indexOf('-') + 1).replace('-', '/');
-  const time = buf[1].split('Z')[0];
-  if (!(date && time)) {
-    return false;
-  }
-
-  let [h, m] = time.split(':');
-  h = Number.parseInt(h, 10);
-  m = Number.parseInt(m, 10);
+  const time = new Date(joinTime);
+  const M = time.getMonth();
+  const d = time.getDate();
+  const h = time.getHours();
+  const m = time.getMinutes(0);
 
   let now = '';
-  if (h === 19) {
+  if (h === 21) {
     now = '조회';
-  } else if (h === 16 && m >= 25) {
+  } else if (m === 16 && m >= 25) {
     now = '종례';
   }
   if (now === '') {
@@ -97,9 +89,9 @@ const participantJoined = async (userName, joinTime) => {
   }
 
   let isNew = false;
-  if (allData[0][allData[0].length - 1] !== `${date} ${now}`) {
+  if (allData[0][allData[0].length - 1] !== `${M}/${d} ${now}`) {
     const res = await setValues(
-      [[`${date} ${now}`]],
+      [[`${M}/${d} ${now}`]],
       `메인!${String.fromCharCode(65 + allData[0].length)}1`,
     );
     if (!res) {
@@ -113,14 +105,9 @@ const participantJoined = async (userName, joinTime) => {
   allData.forEach(async () => {
     if (allData[i][1] === name) {
       const range = `메인!${String.fromCharCode(65 + allData[0].length - (isNew ? 0 : 1))}${i + 1}`;
-      const check = await getValues(
-        range,
-      );
-      if (!check[0][0] || check[0][0] === '미출석') {
-        res = await setValues(
-          [[`${status} ${h}:${m}`]],
-          range,
-        );
+      const check = await getValues(range);
+      if (!check || check[0][0] === '미출석') {
+        res = await setValues([[`${status} ${h}:${m}`]], range);
         if (!res) {
           return;
         }

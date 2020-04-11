@@ -30,10 +30,7 @@ const getValues = async (range) => {
     return null;
   }
 
-  console.log(auth);
-
   const sheets = google.sheets({ version: 'v4', auth });
-  console.log(sheets);
   const value = await sheets.spreadsheets.values.get({
     spreadsheetId: process.env.SHEET_ID,
     range,
@@ -41,7 +38,6 @@ const getValues = async (range) => {
   if (!value || value.status !== 200) {
     return null;
   }
-  console.log(value);
 
   return value.data.values;
 };
