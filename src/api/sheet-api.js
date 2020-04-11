@@ -17,11 +17,11 @@ function authorize(credentials, callback) {
 }
 
 function Sheet() {
-  this.getValues = function getValues(range, callback) {
+  this.getValues = (range, callback) => {
     fs.readFile('credentials.json', (err, content) => {
       authorize(JSON.parse(content), (auth) => {
         const sheets = google.sheets({ version: 'v4', auth });
-        sheets.spreadsheets.get(
+        sheets.spreadsheets.values.get(
           {
             spreadsheetId: process.env.SHEET_ID,
             range,
