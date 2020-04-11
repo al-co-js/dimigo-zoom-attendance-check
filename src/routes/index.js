@@ -5,11 +5,6 @@ const router = Router();
 
 router.post('/', (req, res) => {
   const data = req.body;
-  if (!data) {
-    res.sendStatus(412);
-    return;
-  }
-
   webhookReceived(data);
   res.sendStatus(200);
 });
