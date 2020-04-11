@@ -1,3 +1,4 @@
+import '@babel/polyfill';
 import express, { json, urlencoded, static as _static } from 'express';
 import { join } from 'path';
 import cookieParser from 'cookie-parser';
