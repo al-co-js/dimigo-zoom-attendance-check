@@ -8,22 +8,12 @@ const router = Router();
 const SHEET_NAME = '메인';
 
 const getUserIndex = (allData, userName) => {
-  let name = '';
-  let index = 1;
-  let isBreak = false;
   for (let i = 1; i < allData.length; i += 1) {
-    index += 1;
-    for (let j = 0; j < 2; j += 1) {
-      if (userName.includes(allData[i][j])) {
-        [, name] = allData[i];
-        isBreak = true;
-        break;
-      }
+    if (userName.includes(allData[i][0]) || userName.includes(allData[i][1])) {
+      return i;
     }
-    if (isBreak) break;
   }
-  if (name === '') return -1;
-  return index;
+  return -1;
 };
 
 const parseTime = (joinTime) => {
