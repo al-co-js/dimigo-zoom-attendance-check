@@ -62,11 +62,12 @@ const participantJoined = async (userName, joinTime) => {
     return false;
   }
 
-  const time = moment.tz(new Date(joinTime), 'Asia/Seoul').toDate();
+  const time = moment.tz(joinTime, 'Asia/Seoul').toDate();
   const M = time.getMonth();
   const d = time.getDate();
   const h = time.getHours();
   const m = time.getMinutes(0);
+  console.log(M, d, h, m, time.toISOString());
 
   let now = '';
   if (h === 22) {
