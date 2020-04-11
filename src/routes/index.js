@@ -94,44 +94,9 @@ const participantJoined = async (userName, joinTime) => {
 
   let isNew = false;
   if (allData[0][allData[0].length - 1] !== `${M}/${d} ${now}`) {
+    const notAttendeds = Array(35).fill(['미출석'], 0, 35);
     const res1 = await setValues(
-      [
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-        ['미출석'],
-      ],
+      notAttendeds,
       `메인!${String.fromCharCode(65 + allData[0].length)}2:${65 + allData[0].length}36`,
     );
     if (!res1) {
