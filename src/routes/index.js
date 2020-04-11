@@ -43,7 +43,7 @@ const users = [
   ['2335', '황민지'],
 ];
 
-const participantJoined = async (userName, joinTime) => {
+const getUserIndex = (userName) => {
   let name = '';
   let index = 1;
   let isBreak = false;
@@ -56,13 +56,15 @@ const participantJoined = async (userName, joinTime) => {
         break;
       }
     }
-    if (isBreak) {
-      break;
-    }
+    if (isBreak) break;
   }
-  if (name === '') {
-    return false;
-  }
+  if (name === '') return -1;
+  return index;
+};
+
+const participantJoined = async (userName, joinTime) => {
+  const userIndex = getUserIndex(userName);
+  if (userIndex === -1) return false;
 
   const time = moment.tz(joinTime, 'Asia/Seoul');
   const M = time.month() + 1;
@@ -113,7 +115,7 @@ const participantJoined = async (userName, joinTime) => {
     isNew = true;
   }
 
-  const range = `메인!${String.fromCharCode(65 + allData[0].length - (isNew ? 0 : 1))}${index}`;
+  const range = `메인!${String.fromCharCode(65 + allData[0].length - (isNew ? 0 : 1))}${userIndex}`;
   const check = await getValues(range);
   if (!check || check[0][0] === '미출석') {
     const res = await setValues([[`${status} ${h}:${m}`]], range);
