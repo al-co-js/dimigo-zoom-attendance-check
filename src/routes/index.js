@@ -134,10 +134,6 @@ const webhookReceived = (data) => {
   return false;
 };
 
-router.get('/', (req, res) => {
-  res.send(participantJoined('민승현', '2020-04-11T8:43:13Z'));
-});
-
 router.post('/', (req, res) => {
   const data = req.body;
 
