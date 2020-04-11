@@ -137,12 +137,12 @@ const webhookReceived = (data) => {
     const { participant } = data.payload.object;
     return participantJoined(participant.user_name, participant.join_time);
   }
+
   return false;
 };
 
 router.post('/', (req, res) => {
   const data = req.body;
-
   const result = webhookReceived(data);
   if (!result) {
     res.sendStatus(500);
