@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import moment from 'moment';
 import { getValues, setValues } from '../api/sheet-api';
 
 const router = Router();
@@ -60,7 +61,7 @@ const participantJoined = async (userName, joinTime) => {
     return false;
   }
 
-  const time = new Date(joinTime);
+  const time = moment.tz(new Date(joinTime), 'Asia/Seoul').toDate();
   const M = time.getMonth();
   const d = time.getDate();
   const h = time.getHours();
