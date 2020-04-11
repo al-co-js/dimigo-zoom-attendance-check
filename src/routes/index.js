@@ -130,7 +130,7 @@ const participantJoined = async (userName, joinTime) => {
         ['미출석'],
         ['미출석'],
       ],
-      `메인!${65 + allData[0].length}2:${65 + allData[0].length}36`,
+      `메인!${String.fromCharCode(65 + allData[0].length)}2:${65 + allData[0].length}36`,
     );
     if (!res1) {
       return false;
