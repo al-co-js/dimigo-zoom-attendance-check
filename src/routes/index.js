@@ -45,8 +45,10 @@ const users = [
 
 const participantJoined = async (userName, joinTime) => {
   let name = '';
+  let index = 0;
   let isBreak = false;
   for (let i = 0; i < 35; i += 1) {
+    index += 1;
     for (let j = 0; j < 2; j += 1) {
       if (userName.includes(users[i][j])) {
         [, name] = users[i];
@@ -146,23 +148,18 @@ const participantJoined = async (userName, joinTime) => {
     isNew = true;
   }
 
-  let i = 0;
-  let res = true;
-  allData.forEach(async () => {
-    if (allData[i][1] === name) {
-      const range = `메인!${String.fromCharCode(65 + allData[0].length - (isNew ? 0 : 1))}${i + 1}`;
-      const check = await getValues(range);
-      if (!check || check[0][0] === '미출석') {
-        res = await setValues([[`${status} ${h}:${m}`]], range);
-        if (!res) {
-          return;
-        }
-      }
+  const range = `메인!${String.fromCharCode(
+    65 + allData[0].length - (isNew ? 0 : 1),
+  )}${index}`;
+  const check = await getValues(range);
+  if (!check || check[0][0] === '미출석') {
+    const res = await setValues([[`${status} ${h}:${m}`]], range);
+    if (!res) {
+      return false;
     }
-    i += 1;
-  });
+  }
 
-  return res;
+  return true;
 };
 
 const webhookReceived = (data) => {
