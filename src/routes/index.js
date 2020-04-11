@@ -67,15 +67,15 @@ const participantJoined = async (userName, joinTime) => {
   if (userIndex === -1) return false;
 
   const time = moment.tz(joinTime, 'Asia/Seoul');
-  const M = time.month() + 1;
-  const d = time.date();
-  const h = time.hour();
-  const m = time.minute();
+  const month = time.month() + 1;
+  const date = time.date();
+  const hour = time.hour();
+  const minute = time.minute();
 
   let now = '';
-  if (h === 8) {
+  if (hour === 8) {
     now = '조회';
-  } else if (m === 16 && m >= 25) {
+  } else if (minute === 16 && minute >= 25) {
     now = '종례';
   }
   if (now === '') {
@@ -83,9 +83,9 @@ const participantJoined = async (userName, joinTime) => {
   }
 
   let status = '';
-  if (m <= 45) {
+  if (minute <= 45) {
     status = '출석';
-  } else if (m >= 46) {
+  } else if (minute >= 46) {
     status = '지각';
   }
 
@@ -95,7 +95,7 @@ const participantJoined = async (userName, joinTime) => {
   }
 
   let isNew = false;
-  if (allData[0][allData[0].length - 1] !== `${M}/${d} ${now}`) {
+  if (allData[0][allData[0].length - 1] !== `${month}/${date} ${now}`) {
     const notAttendeds = Array(35).fill(['미출석'], 0, 35);
     const res1 = await setValues(
       notAttendeds,
@@ -106,7 +106,7 @@ const participantJoined = async (userName, joinTime) => {
     }
 
     const res2 = await setValues(
-      [[`${M}/${d} ${now}`]],
+      [[`${month}/${date} ${now}`]],
       `메인!${String.fromCharCode(65 + allData[0].length)}1`,
     );
     if (!res2) {
@@ -118,7 +118,7 @@ const participantJoined = async (userName, joinTime) => {
   const range = `메인!${String.fromCharCode(65 + allData[0].length - (isNew ? 0 : 1))}${userIndex}`;
   const check = await getValues(range);
   if (!check || check[0][0] === '미출석') {
-    const res = await setValues([[`${status} ${h}:${m}`]], range);
+    const res = await setValues([[`${status} ${hour}:${minute}`]], range);
     if (!res) {
       return false;
     }
