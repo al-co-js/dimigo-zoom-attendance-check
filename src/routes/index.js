@@ -63,10 +63,10 @@ const participantJoined = async (userName, joinTime) => {
   }
 
   const time = moment.tz(joinTime, 'Asia/Seoul');
-  const M = time.month;
-  const d = time.date;
-  const h = time.hour;
-  const m = time.minute;
+  const M = time.month();
+  const d = time.date();
+  const h = time.hour();
+  const m = time.minute();
   console.log(M, d, h, m);
 
   let now = '';
