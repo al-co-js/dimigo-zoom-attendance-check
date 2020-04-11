@@ -63,11 +63,10 @@ const participantJoined = async (userName, joinTime) => {
   }
 
   const time = moment.tz(joinTime, 'Asia/Seoul');
-  const M = time.month();
+  const M = time.month() + 1;
   const d = time.date();
   const h = time.hour();
   const m = time.minute();
-  console.log(M, d, h, m);
 
   let now = '';
   if (h === 22) {
@@ -93,11 +92,19 @@ const participantJoined = async (userName, joinTime) => {
 
   let isNew = false;
   if (allData[0][allData[0].length - 1] !== `${M}/${d} ${now}`) {
-    const res = await setValues(
+    const res1 = await setValues(
+      [['미출석']],
+      `메인!${65 + allData[0].length}2:${65 + allData[0].length}36`,
+    );
+    if (!res1) {
+      return false;
+    }
+
+    const res2 = await setValues(
       [[`${M}/${d} ${now}`]],
       `메인!${String.fromCharCode(65 + allData[0].length)}1`,
     );
-    if (!res) {
+    if (!res2) {
       return false;
     }
     isNew = true;
