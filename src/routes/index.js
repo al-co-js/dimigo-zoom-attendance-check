@@ -113,9 +113,7 @@ const participantJoined = async (userName, joinTime) => {
     isNew = true;
   }
 
-  const range = `메인!${String.fromCharCode(
-    65 + allData[0].length - (isNew ? 0 : 1),
-  )}${index}`;
+  const range = `메인!${String.fromCharCode(65 + allData[0].length - (isNew ? 0 : 1))}${index}`;
   const check = await getValues(range);
   if (!check || check[0][0] === '미출석') {
     const res = await setValues([[`${status} ${h}:${m}`]], range);
