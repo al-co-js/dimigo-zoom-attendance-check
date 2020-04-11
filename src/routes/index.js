@@ -68,7 +68,7 @@ const participantJoined = async (userName, joinTime) => {
   const m = time.getMinutes(0);
 
   let now = '';
-  if (h === 21) {
+  if (h === 22) {
     now = '조회';
   } else if (m === 16 && m >= 25) {
     now = '종례';
