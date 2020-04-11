@@ -14,7 +14,7 @@ const authorize = (credentials, callback) => {
     oAuth2Client.setCredentials(JSON.parse(token));
     callback(oAuth2Client);
   });
-}
+};
 
 class Sheet {
   constructor() {
@@ -22,10 +22,13 @@ class Sheet {
       fs.readFile('credentials.json', (_err, content) => {
         authorize(JSON.parse(content), (auth) => {
           const sheets = google.sheets({ version: 'v4', auth });
-          sheets.spreadsheets.values.get({
-            spreadsheetId: process.env.SHEET_ID,
-            range,
-          }, callback);
+          sheets.spreadsheets.values.get(
+            {
+              spreadsheetId: process.env.SHEET_ID,
+              range,
+            },
+            callback,
+          );
         });
       });
     };
