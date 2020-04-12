@@ -48,12 +48,12 @@ const initializeColumn = async (allData, columnName) => {
   const values = Array(36).fill(['미출석'], 1, 36);
   values[0] = [columnName];
   const columnChar = String.fromCharCode(65 + allData[0].length);
-  await setValues(values, `${SHEET_NAME}!${columnChar}:${columnChar}`);
+  await setValues(`${SHEET_NAME}!${columnChar}:${columnChar}`, values);
 };
 
 const setUserStatus = async (currentValue, range, value) => {
   if (!currentValue || currentValue === '미출석') {
-    await setValues([[value]], range);
+    await setValues(range, [[value]]);
   }
 };
 

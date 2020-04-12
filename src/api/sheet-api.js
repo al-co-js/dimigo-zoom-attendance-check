@@ -42,7 +42,7 @@ const getValues = async (range) => {
   return value.data.values;
 };
 
-const setValues = async (values, range) => {
+const setValues = async (range, values) => {
   const auth = await authorize();
   if (!auth) {
     return false;
