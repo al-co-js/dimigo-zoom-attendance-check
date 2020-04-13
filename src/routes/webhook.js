@@ -67,6 +67,7 @@ const participantJoined = async (userName, joinTime) => {
 const webhookReceived = async (data) => {
   if (data.event === 'meeting.participant_joined') {
     const { participant } = data.payload.object;
+    console.log(participant);
     const result = await participantJoined(participant.user_name, participant.join_time);
     return result;
   }
@@ -77,11 +78,9 @@ const webhookReceived = async (data) => {
 router.post('/', async (req, res) => {
   const data = req.body;
   console.log(data);
-  const result = await webhookReceived(data);
-  if (!result) {
-    res.sendStatus(500);
-    return;
-  }
+  await webhookReceived(data).catch((err) => {
+    console.log(err);
+  });
 
   res.sendStatus(200);
 });
