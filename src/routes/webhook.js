@@ -26,32 +26,39 @@ const parseTime = (joinTime) => {
   };
 };
 
-const getCurrentSubject = (timeData, now, day) => {
+const getCurrentTime = (timeData, now, day) => {
   const {
     timetable, times, startTime, endTime,
   } = timeData;
 
-  if (startTime - 20 <= now && now <= startTime + 5) {
+  if (startTime - 10 <= now && now <= startTime + 5) {
     return '조회';
   }
-  if (endTime - 10 <= now && now <= endTime + 20) {
+  if (endTime - 10 <= now && now <= endTime + 5) {
     return '종례';
   }
 
   const todayTimetable = timetable[day - 1];
-  let subject = '';
+  let currentTime;
   times.forEach((time, index) => {
-    if (time - 10 <= now && now <= time + 30) {
-      subject = todayTimetable[index];
+    if (time - 10 <= now && now <= time + 30 && todayTimetable[index] !== '') {
+      currentTime = index;
     }
   });
-  if (subject !== '') return subject;
+  if (currentTime !== undefined) return currentTime;
 
-  throw Error('출석하는 시간이 아닙니다.');
+  throw Error(`출석하는 시간이 아닙니다: ${parseInt(now / 60, 10)}시 ${now % 60}분`);
 };
 
-const getParticipantStatus = (minute) => {
-  if (minute <= 45) return '출석';
+const getParticipantStatus = (timeData, now, currentTime) => {
+  const { times, startTime, endTime } = timeData;
+
+  let compareTime;
+  if (currentTime === '조회') compareTime = startTime;
+  else if (currentTime === '종례') compareTime = endTime;
+  else compareTime = times[currentTime];
+
+  if (now <= compareTime) return '출석';
   return '지각';
 };
 
@@ -62,15 +69,15 @@ const setUserStatus = async (currentValue, range, value) => {
 };
 
 const participantJoined = async (userName, joinTime) => {
-  const allData = await getValues(SHEET_NAME);
   const timeData = JSON.parse(await readFileAsync('timetable.json'));
+  const allData = await getValues(SHEET_NAME);
   const userIndex = getUserIndex(allData, userName) + 1;
 
   const { day, hour, minute } = parseTime(joinTime);
+  const now = hour * 60 + minute;
 
-  getCurrentSubject(timeData, hour * 60 + minute, day);
-
-  const participantStatus = getParticipantStatus(minute);
+  const currentTime = getCurrentTime(timeData, now, day);
+  const participantStatus = getParticipantStatus(timeData, now, currentTime);
 
   const column = allData[0].length - 1;
   const currentValue = allData[userIndex - 1][column];
