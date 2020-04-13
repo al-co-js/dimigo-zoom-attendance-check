@@ -18,7 +18,7 @@ const getUserIndex = (allData, userName) => {
 };
 
 const parseTime = (joinTime) => {
-  const time = moment.tz(joinTime, 'Asia/Seoul');
+  const time = moment.tz(new Date(joinTime), 'Asia/Seoul');
   console.log(time.day(), time.hour(), time.minute());
   return {
     day: time.day(),
