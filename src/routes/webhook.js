@@ -9,7 +9,9 @@ const SHEET_NAME = '메인';
 
 const getUserIndex = (allData, userName) => {
   const isIncludes = (value) => userName.includes(value[0]) || userName.includes(value[1]);
-  return allData.findIndex(isIncludes) + 1;
+  const index = allData.findIndex(isIncludes);
+  if (index === -1) throw Error(`해당하는 학번, 이름을 찾을 수 없습니다: ${userName}`);
+  return index;
 };
 
 const parseTime = (joinTime) => {
@@ -27,7 +29,7 @@ const getCurrentSubject = (hour, minute) => {
   if (hour === 16 && minute >= 25) {
     return '종례';
   }
-  return undefined;
+  throw Error('출석하는 시간이 아닙니다.');
 };
 
 const getParticipantStatus = (minute) => {
@@ -36,32 +38,29 @@ const getParticipantStatus = (minute) => {
 };
 
 const setUserStatus = async (currentValue, range, value) => {
-  if (!currentValue || currentValue === '미출석') {
+  if (!currentValue || currentValue === '민승현') {
     await setValues(range, [[value]]);
   }
 };
 
 const participantJoined = async (userName, joinTime) => {
   const allData = await getValues(SHEET_NAME);
-  const userIndex = getUserIndex(allData, userName);
-  if (userIndex === -1) return false;
+  const userIndex = getUserIndex(allData, userName) + 1;
 
   const { hour, minute } = parseTime(joinTime);
 
-  const currentSubject = getCurrentSubject(hour, minute);
-  if (!currentSubject) return false;
+  getCurrentSubject(hour, minute);
 
   const participantStatus = getParticipantStatus(minute);
 
   const column = allData[0].length - 1;
   const currentValue = allData[userIndex - 1][column];
+
   await setUserStatus(
     currentValue,
     `${SHEET_NAME}!${String.fromCharCode(65 + column)}${userIndex}`,
     `${participantStatus} ${hour}:${minute}`,
   );
-
-  return true;
 };
 
 const webhookReceived = async (data) => {
@@ -71,12 +70,19 @@ const webhookReceived = async (data) => {
     return result;
   }
 
-  return false;
+  throw Error(`구현되지 않은 이벤트입니다: ${data.event}`);
 };
 
 router.post('/', async (req, res) => {
   const data = req.body;
-  await webhookReceived(data);
+  try {
+    await webhookReceived(data);
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(err);
+    res.sendStatus(400);
+    return;
+  }
 
   res.sendStatus(200);
 });
