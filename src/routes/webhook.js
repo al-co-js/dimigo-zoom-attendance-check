@@ -1,9 +1,12 @@
 import { Router } from 'express';
 import moment from 'moment';
 import 'moment-timezone';
+import fs from 'fs';
+import { promisify } from 'util';
 import { getValues, setValues } from '../api/sheet-api';
 
 const router = Router();
+const readFileAsync = promisify(fs.readFile);
 
 const SHEET_NAME = '메인';
 
@@ -17,18 +20,33 @@ const getUserIndex = (allData, userName) => {
 const parseTime = (joinTime) => {
   const time = moment.tz(joinTime, 'Asia/Seoul');
   return {
+    day: time.day(),
     hour: time.hour(),
     minute: time.minute(),
   };
 };
 
-const getCurrentSubject = (hour, minute) => {
-  if (hour === 8) {
+const getCurrentSubject = (timeData, now, day) => {
+  const {
+    timetable, times, startTime, endTime,
+  } = timeData;
+
+  if (startTime - 20 <= now && now <= startTime + 5) {
     return '조회';
   }
-  if (hour === 16 && minute >= 25) {
+  if (endTime - 10 <= now && now <= endTime + 20) {
     return '종례';
   }
+
+  const todayTimetable = timetable[day - 1];
+  let subject = '';
+  times.forEach((time, index) => {
+    if (time - 10 <= now && now <= time + 30) {
+      subject = todayTimetable[index];
+    }
+  });
+  if (subject !== '') return subject;
+
   throw Error('출석하는 시간이 아닙니다.');
 };
 
@@ -45,11 +63,12 @@ const setUserStatus = async (currentValue, range, value) => {
 
 const participantJoined = async (userName, joinTime) => {
   const allData = await getValues(SHEET_NAME);
+  const timeData = JSON.parse(await readFileAsync('timetable.json'));
   const userIndex = getUserIndex(allData, userName) + 1;
 
-  const { hour, minute } = parseTime(joinTime);
+  const { day, hour, minute } = parseTime(joinTime);
 
-  getCurrentSubject(hour, minute);
+  getCurrentSubject(timeData, hour * 60 + minute, day);
 
   const participantStatus = getParticipantStatus(minute);
 
