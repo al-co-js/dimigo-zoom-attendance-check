@@ -44,14 +44,18 @@ const setUserStatus = async (currentValue, range, value) => {
 const participantJoined = async (userName, joinTime) => {
   const allData = await getValues(SHEET_NAME);
   const userIndex = getUserIndex(allData, userName);
+  console.log('1');
   if (userIndex === -1) return false;
 
   const { hour, minute } = parseTime(joinTime);
+  console.log('2');
 
   const currentSubject = getCurrentSubject(hour, minute);
   if (!currentSubject) return false;
+  console.log('3');
 
   const participantStatus = getParticipantStatus(minute);
+  console.log('4');
 
   const column = allData[0].length - 1;
   const currentValue = allData[userIndex - 1][column];
@@ -60,6 +64,7 @@ const participantJoined = async (userName, joinTime) => {
     `${SHEET_NAME}!${String.fromCharCode(65 + column)}${userIndex}`,
     `${participantStatus} ${hour}:${minute}`,
   );
+  console.log('5');
 
   return true;
 };
@@ -69,6 +74,7 @@ const webhookReceived = async (data) => {
     const { participant } = data.payload.object;
     console.log(participant);
     const result = await participantJoined(participant.user_name, participant.join_time);
+    console.log('6');
     return result;
   }
 
@@ -81,6 +87,7 @@ router.post('/', async (req, res) => {
   await webhookReceived(data).catch((err) => {
     console.log(err);
   });
+  console.log('7');
 
   res.sendStatus(200);
 });
