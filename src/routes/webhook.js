@@ -15,8 +15,6 @@ const getUserIndex = (allData, userName) => {
 const parseTime = (joinTime) => {
   const time = moment.tz(joinTime, 'Asia/Seoul');
   return {
-    month: time.month() + 1,
-    date: time.date(),
     hour: time.hour(),
     minute: time.minute(),
   };
@@ -37,13 +35,6 @@ const getParticipantStatus = (minute) => {
   return '지각';
 };
 
-const isNewAttendance = (allData, columnName) => {
-  if (allData[0][allData[0].length - 1] !== columnName) {
-    return true;
-  }
-  return false;
-};
-
 const setUserStatus = async (currentValue, range, value) => {
   if (!currentValue || currentValue === '미출석') {
     await setValues(range, [[value]]);
@@ -55,19 +46,14 @@ const participantJoined = async (userName, joinTime) => {
   const userIndex = getUserIndex(allData, userName);
   if (userIndex === -1) return false;
 
-  const {
-    month, date, hour, minute,
-  } = parseTime(joinTime);
+  const { hour, minute } = parseTime(joinTime);
 
   const currentSubject = getCurrentSubject(hour, minute);
   if (!currentSubject) return false;
 
-  const columnName = `${month}/${date} ${currentSubject}`;
   const participantStatus = getParticipantStatus(minute);
 
-  const isNew = isNewAttendance(allData, columnName);
-
-  const column = allData[0].length - (isNew ? 0 : 1);
+  const column = allData[0].length - 1;
   const currentValue = allData[userIndex - 1][column];
   await setUserStatus(
     currentValue,
