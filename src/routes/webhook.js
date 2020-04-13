@@ -74,9 +74,7 @@ const participantJoined = async (userName, joinTime) => {
   const userIndex = getUserIndex(allData, userName) + 1;
 
   const { date, hour, minute } = parseTime(joinTime);
-  console.log(date, hour, minute, hour * 60 + minute, joinTime);
   const now = hour * 60 + minute;
-  console.log(now);
 
   const currentTime = getCurrentTime(timeData, now, date);
   const participantStatus = getParticipantStatus(timeData, now, currentTime);
