@@ -64,19 +64,20 @@ const participantJoined = async (userName, joinTime) => {
   return true;
 };
 
-const webhookReceived = (data) => {
+const webhookReceived = async (data) => {
   if (data.event === 'meeting.participant_joined') {
     const { participant } = data.payload.object;
-    return participantJoined(participant.user_name, participant.join_time);
+    const result = await participantJoined(participant.user_name, participant.join_time);
+    return result;
   }
 
   return false;
 };
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const data = req.body;
   console.log(data);
-  const result = webhookReceived(data);
+  const result = await webhookReceived(data);
   if (!result) {
     res.sendStatus(500);
     return;
