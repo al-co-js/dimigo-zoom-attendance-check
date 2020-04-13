@@ -78,12 +78,9 @@ const webhookReceived = async (data) => {
 router.post('/', async (req, res) => {
   const data = req.body;
   console.log(data);
-  try {
-    await webhookReceived(data);
-  } catch (e) {
-    console.log(e);
-    res.sendStatus(500);
-  }
+  await webhookReceived(data).catch((err) => {
+    console.log(err);
+  });
 
   res.sendStatus(200);
 });
