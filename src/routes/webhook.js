@@ -75,6 +75,7 @@ const webhookReceived = (data) => {
 
 router.post('/', (req, res) => {
   const data = req.body;
+  console.log(data);
   const result = webhookReceived(data);
   if (!result) {
     res.sendStatus(500);
