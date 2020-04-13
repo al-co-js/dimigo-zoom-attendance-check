@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import { config } from 'dotenv';
 
-import Router from './routes/webhook';
+import Router from './routes/index';
 
 const app = express();
 
