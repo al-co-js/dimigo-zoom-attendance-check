@@ -24,7 +24,7 @@ const getCurrentSubject = (hour, minute) => {
   if (hour === 8) {
     return '조회';
   }
-  if (minute === 16 && minute >= 25) {
+  if (minute === 17 && minute >= 0) {
     return '종례';
   }
   return undefined;
