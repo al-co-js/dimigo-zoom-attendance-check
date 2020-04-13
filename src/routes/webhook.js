@@ -69,7 +69,7 @@ const setUserStatus = async (currentValue, range, value) => {
 };
 
 const participantJoined = async (userName, joinTime) => {
-  const timeData = JSON.parse(await readFileAsync('timetable.json'));
+  const timeData = JSON.parse(await readFileAsync('../../public/timetable.json'));
   const allData = await getValues(SHEET_NAME);
   const userIndex = getUserIndex(allData, userName) + 1;
 

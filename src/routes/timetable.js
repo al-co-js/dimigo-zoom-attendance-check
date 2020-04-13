@@ -8,7 +8,7 @@ const writeFileAsync = promisify(fs.writeFile);
 router.post('/', async (req, res) => {
   const data = req.body;
   try {
-    await writeFileAsync('timetable.json', JSON.stringify(data));
+    await writeFileAsync('../../public/timetable.json', JSON.stringify(data));
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log(err);
