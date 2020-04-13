@@ -44,18 +44,14 @@ const setUserStatus = async (currentValue, range, value) => {
 const participantJoined = async (userName, joinTime) => {
   const allData = await getValues(SHEET_NAME);
   const userIndex = getUserIndex(allData, userName);
-  console.log('1');
   if (userIndex === -1) return false;
 
   const { hour, minute } = parseTime(joinTime);
-  console.log('2');
 
   const currentSubject = getCurrentSubject(hour, minute);
   if (!currentSubject) return false;
-  console.log('3');
 
   const participantStatus = getParticipantStatus(minute);
-  console.log('4');
 
   const column = allData[0].length - 1;
   const currentValue = allData[userIndex - 1][column];
@@ -64,7 +60,6 @@ const participantJoined = async (userName, joinTime) => {
     `${SHEET_NAME}!${String.fromCharCode(65 + column)}${userIndex}`,
     `${participantStatus} ${hour}:${minute}`,
   );
-  console.log('5');
 
   return true;
 };
@@ -72,9 +67,7 @@ const participantJoined = async (userName, joinTime) => {
 const webhookReceived = async (data) => {
   if (data.event === 'meeting.participant_joined') {
     const { participant } = data.payload.object;
-    console.log(participant);
     const result = await participantJoined(participant.user_name, participant.join_time);
-    console.log(result);
     return result;
   }
 
@@ -83,11 +76,7 @@ const webhookReceived = async (data) => {
 
 router.post('/', async (req, res) => {
   const data = req.body;
-  console.log(data);
-  await webhookReceived(data).catch((err) => {
-    console.log(err);
-  });
-  console.log('7');
+  await webhookReceived(data);
 
   res.sendStatus(200);
 });
