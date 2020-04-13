@@ -46,7 +46,6 @@ const getCurrentTime = (timeData, now, day) => {
     }
   });
   if (currentTime !== undefined) return currentTime;
-  console.log(now);
 
   throw Error(`출석하는 시간이 아닙니다: ${now / 60}시 ${now % 60}분`);
 };
@@ -76,6 +75,7 @@ const participantJoined = async (userName, joinTime) => {
 
   const { day, hour, minute } = parseTime(joinTime);
   const now = hour * 60 + minute;
+  console.log(now);
 
   const currentTime = getCurrentTime(timeData, now, day);
   const participantStatus = getParticipantStatus(timeData, now, currentTime);
