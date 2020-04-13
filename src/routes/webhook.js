@@ -38,7 +38,7 @@ const getParticipantStatus = (minute) => {
 };
 
 const setUserStatus = async (currentValue, range, value) => {
-  if (!currentValue || currentValue === '민승현') {
+  if (!currentValue || currentValue === '미출석') {
     await setValues(range, [[value]]);
   }
 };
