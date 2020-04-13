@@ -47,7 +47,7 @@ const getCurrentTime = (timeData, now, day) => {
   });
   if (currentTime !== undefined) return currentTime;
 
-  throw Error(`출석하는 시간이 아닙니다: ${now / 60}시 ${now % 60}분`);
+  throw Error(`출석하는 시간이 아닙니다: ${Math.floor(now / 60)}시 ${now % 60}분`);
 };
 
 const getParticipantStatus = (timeData, now, currentTime) => {
