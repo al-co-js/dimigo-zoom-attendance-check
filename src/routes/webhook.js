@@ -74,7 +74,7 @@ const webhookReceived = async (data) => {
     const { participant } = data.payload.object;
     console.log(participant);
     const result = await participantJoined(participant.user_name, participant.join_time);
-    console.log('6');
+    console.log(result);
     return result;
   }
 
