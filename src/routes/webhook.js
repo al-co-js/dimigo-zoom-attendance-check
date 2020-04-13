@@ -18,10 +18,9 @@ const getUserIndex = (allData, userName) => {
 };
 
 const parseTime = (joinTime) => {
-  const time = moment.tz(new Date(joinTime), 'Asia/Seoul');
-  console.log(time.day(), time.hour(), time.minute());
+  const time = moment.tz(joinTime, 'Asia/Seoul');
   return {
-    day: time.day(),
+    date: time.date(),
     hour: time.hour(),
     minute: time.minute(),
   };
@@ -74,12 +73,12 @@ const participantJoined = async (userName, joinTime) => {
   const allData = await getValues(SHEET_NAME);
   const userIndex = getUserIndex(allData, userName) + 1;
 
-  const { day, hour, minute } = parseTime(joinTime);
-  console.log(day, hour, minute, hour * 60 + minute, joinTime);
+  const { date, hour, minute } = parseTime(joinTime);
+  console.log(date, hour, minute, hour * 60 + minute, joinTime);
   const now = hour * 60 + minute;
   console.log(now);
 
-  const currentTime = getCurrentTime(timeData, now, day);
+  const currentTime = getCurrentTime(timeData, now, date);
   const participantStatus = getParticipantStatus(timeData, now, currentTime);
 
   const column = allData[0].length - 1;
