@@ -44,13 +44,6 @@ const isNewAttendance = (allData, columnName) => {
   return false;
 };
 
-const initializeColumn = async (allData, columnName) => {
-  const values = Array(36).fill(['미출석'], 1, 36);
-  values[0] = [columnName];
-  const columnChar = String.fromCharCode(65 + allData[0].length);
-  await setValues(`${SHEET_NAME}!${columnChar}:${columnChar}`, values);
-};
-
 const setUserStatus = async (currentValue, range, value) => {
   if (!currentValue || currentValue === '미출석') {
     await setValues(range, [[value]]);
@@ -73,7 +66,6 @@ const participantJoined = async (userName, joinTime) => {
   const participantStatus = getParticipantStatus(minute);
 
   const isNew = isNewAttendance(allData, columnName);
-  if (isNew) await initializeColumn(allData, columnName);
 
   const column = allData[0].length - (isNew ? 0 : 1);
   const currentValue = allData[userIndex - 1][column];
