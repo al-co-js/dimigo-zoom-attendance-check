@@ -48,4 +48,16 @@ const setValues = async (range, values) => {
   if (res.status !== 200) throw Error('Cannot set values.');
 };
 
-export { getValues, setValues };
+const getColumnName = (columnNumber) => {
+  const BASE = 26;
+  let columnName = '';
+  let tempNumber = columnNumber + 1;
+  while (tempNumber > 0) {
+    const position = tempNumber % BASE;
+    columnName = position === 0 ? 'Z' : String.fromCharCode(position + 64) + columnName;
+    tempNumber = parseInt((tempNumber - 1) / BASE, 10);
+  }
+  return columnName.toString();
+};
+
+export { getValues, setValues, getColumnName };

@@ -3,7 +3,7 @@ import moment from 'moment';
 import 'moment-timezone';
 import fs from 'fs';
 import { promisify } from 'util';
-import { getValues, setValues } from '../api/sheet-api';
+import { getValues, setValues, getColumnName } from '../api/sheet-api';
 
 const router = Router();
 const readFileAsync = promisify(fs.readFile);
@@ -84,7 +84,7 @@ const participantJoined = async (userName, joinTime) => {
 
   await setUserStatus(
     currentValue,
-    `${SHEET_NAME}!${String.fromCharCode(65 + column)}${userIndex}`,
+    `${SHEET_NAME}!${getColumnName(column)}${userIndex}`,
     `${participantStatus} ${hour}:${minute}`,
   );
 };
