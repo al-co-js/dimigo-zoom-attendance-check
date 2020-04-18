@@ -69,11 +69,13 @@ const setUserStatus = async (currentValue, range, value) => {
 };
 
 const participantJoined = async (userName, joinTime) => {
+  const { day, hour, minute } = parseTime(joinTime);
+  if (day === 6 || day === 0) throw Error('주말엔 출석을 하지 않습니다.');
+
   const timeData = JSON.parse(await readFileAsync('timetable.json'));
   const allData = await getValues(SHEET_NAME);
   const userIndex = getUserIndex(allData, userName) + 1;
 
-  const { day, hour, minute } = parseTime(joinTime);
   const now = hour * 60 + minute;
 
   const currentTime = getCurrentTime(timeData, now, day);
