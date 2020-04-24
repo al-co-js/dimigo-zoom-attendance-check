@@ -81,12 +81,11 @@ const participantJoined = async (userName, joinTime) => {
   const currentTime = getCurrentTime(timeData, now, day);
   const participantStatus = getParticipantStatus(timeData, now, currentTime);
 
-  const column = allData[0].length - 1;
-  const currentValue = allData[userIndex - 1][column];
+  const currentValue = allData[userIndex - 1][2];
 
   await setUserStatus(
     currentValue,
-    `${SHEET_NAME}!${getColumnName(column)}${userIndex}`,
+    `${SHEET_NAME}!${getColumnName(3)}${userIndex}`,
     `${participantStatus} ${hour}:${minute}`,
   );
 };
