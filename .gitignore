@@ -3,3 +3,4 @@ node_modules
 dist
 timetable.json
 credentials.json
+token.json
